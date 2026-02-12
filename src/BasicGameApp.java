@@ -38,10 +38,10 @@ public class BasicGameApp implements Runnable {
 
     Bart bart1;
     Image bartImg1;
-    Bob bob1;
     Image bobImg1;
 
     boolean firstCrash;
+    Bob [] bobShower = new Bob[7];
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -57,11 +57,13 @@ public class BasicGameApp implements Runnable {
 
         setUpGraphics();
         firstCrash = true;
-        bart1 = new Bart("bart1.jpg", 300, 300, 0.25);
+        bart1 = new Bart("bart1.jpg", 300, 300);
         bartImg1 = Toolkit.getDefaultToolkit().getImage("bart.jpg");
-        bob1 = new Bob("bob1.jpg", 500, 200,0.75);
         bobImg1 = Toolkit.getDefaultToolkit().getImage("bob.png");
-        run();
+        for (int x = 0; x < bobShower.length; x++){
+            bobShower[x]=new Bob ("bob"+x,((int)(Math.random()*WIDTH)),((int)(Math.random()*HEIGHT)));
+        }
+
 
     } // end BasicGameApp constructor
 
@@ -90,24 +92,26 @@ public class BasicGameApp implements Runnable {
 
     public void moveThings() {
         bart1.move();
-        bob1.move();
-
+        for (int x = 0; x < bobShower.length; x++){
+            bobShower[x].move();
+        }
         checkCrash();
     }
 
     public void checkCrash(){
-        if (bart1.rect.intersects(bob1.rect) && firstCrash == true){
-            firstCrash = false;
-            bart1.dx = -bart1.dx;
-            bart1.dy = -bart1.dy;
-            bob1.dx = -bob1.dx;
-            bob1.dy = -bob1.dy;
-            bob1.height += 5;
-            bob1.width += 5;
-            bart1.health = bart1.health - 5;
-        }
-        if (!bart1.rect.intersects(bob1.rect)){
-            firstCrash = true;
+
+        for (int x = 0; x < bobShower.length; x++){
+
+            if (bart1.rect.intersects(bobShower[x].rect)){
+
+                bart1.dx = -bart1.dx;
+                bart1.dy = -bart1.dy;
+
+                bobShower[x].dx = -bobShower[x].dx;
+                bobShower[x].dy = -bobShower[x].dy;
+
+                bart1.health -= 5;
+            }
         }
     }
 
@@ -120,10 +124,12 @@ public class BasicGameApp implements Runnable {
         g.fillRect(850, 30, bart1.health, 15);
         //draw the image
         g.drawImage(bartImg1, bart1.xpos, bart1.ypos, bart1.width, bart1.height, null);
-        g.drawImage(bobImg1, bob1.xpos, bob1.ypos, bob1.width, bob1.height, null);
 
-        g.dispose();
         bufferStrategy.show();
+        for(int x =0; x<bobShower.length; x++){
+            g.drawImage(bobImg1,bobShower[x].xpos,bobShower[x].ypos,bobShower[x].width,bobShower[x].height,null);
+        }
+        g.dispose();
     }
 
     //Pauses or sleeps the computer for the amount specified in milliseconds

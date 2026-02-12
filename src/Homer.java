@@ -17,12 +17,11 @@ public class Homer {
     public int height;                //the height of the hero image
     public boolean isAlive;           //a boolean to denote if the hero is alive or dead
     public Rectangle rect;
-    public double successRate;
     public int health;
 
     //This is a constructor that takes 3 parameters.
     // This allows us to specify the hero's name and position when we build it.
-    public Homer(String pName, int pXpos, int pYpos, double psuccess) {
+    public Homer(String pName, int pXpos, int pYpos) {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
@@ -32,7 +31,6 @@ public class Homer {
         height = 100;
         isAlive = true;
         rect = new Rectangle(xpos, ypos, width, height);
-        successRate = psuccess;
         health = 100;
     }
 
